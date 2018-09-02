@@ -12,7 +12,7 @@ import csv
 
 class DataGrabber():
 	"""
-	Used for historical data. Making a unqiue class to hold these because
+	Used to grab historical data. Making a unqiue class to hold these because
 	it will be used in a graphing and testing applications
 	"""
 
