@@ -30,7 +30,6 @@ class Bittrex():
 	"""
 
 	def __init__(self, secrets):
-		print(secrets)
 		self.api_key = str(secrets['bittrex']['api_key'])
 		self.api_secret = str(secrets['bittrex']['api_secret'])
 		self.public_set = set(PUBLIC_SET)

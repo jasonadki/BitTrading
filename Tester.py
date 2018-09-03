@@ -58,7 +58,7 @@ class Tester():
 			else:
 				print(f'N on {currentTime} ', end = '')
 
-			print('{0:.10f}'.format(currentVal), end = '')
+			print('{0:.8}'.format(currentVal), end = '')
 			print(f' Wallet: {round(wallet,8)} coinCount: {round(coinCount,8)}')
 
 
@@ -67,14 +67,6 @@ class Tester():
 
 
 		return finalVal
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -89,10 +81,9 @@ if __name__ == '__main__':
 
 	newData = Tester(data, .08)
 
-	# for i in range(3,45):
-	# 	print(f'{i}: {newData.trailingAverage(i)}')
-
 	print(newData.trailingAverage(7))
+
+
 
 
 

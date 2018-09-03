@@ -13,7 +13,7 @@ import csv
 class DataGrabber():
 	"""
 	Used to grab historical data. Making a unqiue class to hold these because
-	it will be used in a graphing and testing applications
+	it will be used in a graphing, testing and live trading applications
 	"""
 
 	def __init__(self, secrets, market, timeInterval, priceType):
