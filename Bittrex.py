@@ -133,20 +133,6 @@ class Bittrex():
 		"""
 		return self.api_request('getmarkethistory', {'market': market})
 
-	def buy_market(self, market, quantity, rate):
-		"""
-		Used to place a buy order in a specific market. Use buymarket to
-		place market orders. Make sure you have the proper permissions
-		set on your API keys for this call to work
-
-		:param market: <str> String literal for the market (ex: BTC-LTC)
-		:param quantity: <float> The amount to purchase
-		:param rate: <float> The rate at which to place the order.
-			This is not needed for market orders
-		:return: <dict> 
-		"""
-		return self.api_request('buymarket', {'market': market, 'quantity': quantity, 'rate': rate})
-
 	def buy_limit(self, market, quantity, rate):
 		"""
 		Used to place a buy order in a specific market. Use buylimit to place
@@ -160,20 +146,6 @@ class Bittrex():
 		:return: <dict> 
 		"""
 		return self.api_request('buylimit', {'market': market, 'quantity': quantity, 'rate': rate})
-
-	def sell_market(self, market, quantity, rate):
-		"""
-		Used to place a sell order in a specific market. Use sellmarket to place
-		market orders. Make sure you have the proper permissions set on your
-		API keys for this call to work
-
-		:param market: <str> String literal for the market (ex: BTC-LTC)
-		:param quantity: <float> The amount to purchase
-		:param rate: <float> The rate at which to place the order.
-			This is not needed for market orders
-		:return: <dict> 
-		"""
-		return self.api_request('sellmarket', {'market': market, 'quantity': quantity, 'rate': rate})
 
 	def sell_limit(self, market, quantity, rate):
 		"""
