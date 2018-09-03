@@ -42,26 +42,21 @@ class Tester():
 
 			# If current price is greater than average and holding SELL
 			if currentVal > currentAvg and holding:
-				print(wallet)
 				wallet += currentVal * coinCount
 				coinCount = 0
 				holding = not holding
-				print(wallet)
 				print(f'Sold on {currentTime}')
 
 			# If current price is less than average and not holding BUY
 			if currentVal < currentAvg and not holding:
 				numCoins = wallet / currentVal
-
-				wallet -= numCoins
+				wallet -= (numCoins * currentVal)
 				coinCount = numCoins
 				holding = not holding
 				print(f'Bought on {currentTime}')
 
+
 		# When done calculate number of coins finished with
-		# print(wallet)
-		# print(coinCount)
-		# print(currentVal)
 		finalVal = wallet + (coinCount * currentVal)
 
 
@@ -87,7 +82,7 @@ if __name__ == '__main__':
 	data = data.drop(data.index[0])
 
 	newData = Tester(data, .08)
-	print(newData.trailingAverage(5))
+	print(newData.trailingAverage(6))
 
 
 
