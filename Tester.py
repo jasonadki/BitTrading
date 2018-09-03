@@ -42,18 +42,24 @@ class Tester():
 
 			# If current price is greater than average and holding SELL
 			if currentVal > currentAvg and holding:
-				wallet += currentVal * coinCount
+				wallet += (currentVal * coinCount * .9975)
 				coinCount = 0
 				holding = not holding
-				print(f'Sold on {currentTime}')
+				print(f'S on {currentTime} ', end = '')
 
 			# If current price is less than average and not holding BUY
-			if currentVal < currentAvg and not holding:
-				numCoins = wallet / currentVal
+			elif currentVal < currentAvg and not holding:
+				numCoins = wallet / (currentVal * 1.0025)
 				wallet -= (numCoins * currentVal)
 				coinCount = numCoins
 				holding = not holding
-				print(f'Bought on {currentTime}')
+				print(f'B on {currentTime} ', end = '')
+
+			else:
+				print(f'N on {currentTime} ', end = '')
+
+			print('{0:.10f}'.format(currentVal), end = '')
+			print(f' Wallet: {round(wallet,8)} coinCount: {round(coinCount,8)}')
 
 
 		# When done calculate number of coins finished with
@@ -77,12 +83,16 @@ if __name__ == '__main__':
 		secrets = json.load(file)
 		file.close()
 
-	data = DataGrabber(secrets, 'BTC-RVN', 'day', 'O').get_data()
+	data = DataGrabber(secrets, 'BTC-RVN', 'fiveMin', 'O').get_data()
 
 	data = data.drop(data.index[0])
 
 	newData = Tester(data, .08)
-	print(newData.trailingAverage(6))
+
+	# for i in range(3,45):
+	# 	print(f'{i}: {newData.trailingAverage(i)}')
+
+	print(newData.trailingAverage(7))
 
 
 
