@@ -111,17 +111,17 @@ class Bittrex():
 		"""
 		return self.api_request('getmarketsummaries')
 
-	def get_orderbook(self, market, depth_type, depth=20):
+	def get_orderbook(self, market, depth_type):
 		"""
 		Used to get retrieve the orderbook for a given market
 
 		:param market: <str> String literal for the market (ex: BTC-LTC)
 		:param depth_type: <str> buy, sell or both to identify the type of orderbook to return.
-								Use constants BUY_ORDERBOOK, SELL_ORDERBOOK, BOTH_ORDERBOOK
+								Use constants buy, sell, both
 		:param depth: <int> how deep of an order book to retrieve. Max is 100, default is 20
 		:return: <dict> Orderbook of market in JSON
 		"""
-		return self.api_request('getorderbook', {'market': market, 'type': depth_type, 'depth': depth})
+		return self.api_request('getorderbook', {'market': market, 'type': depth_type})
 
 	def get_market_history(self, market):
 		"""
@@ -142,7 +142,6 @@ class Bittrex():
 		:param market: <str> String literal for the market (ex: BTC-LTC)
 		:param quantity: <float> The amount to purchase
 		:param rate: <float> The rate at which to place the order.
-			This is not needed for market orders
 		:return: <dict> 
 		"""
 		return self.api_request('buylimit', {'market': market, 'quantity': quantity, 'rate': rate})
@@ -156,7 +155,6 @@ class Bittrex():
 		:param market: <str> String literal for the market (ex: BTC-LTC)
 		:param quantity: <float> The amount to purchase
 		:param rate: <float> The rate at which to place the order.
-			This is not needed for market orders
 		:return: <dict> 
 		"""
 		return self.api_request('selllimit', {'market': market, 'quantity': quantity, 'rate': rate})
