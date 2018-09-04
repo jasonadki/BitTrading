@@ -106,3 +106,74 @@ class Trader():
 		result  = dict(zip(coin, amount))
 
 		return result
+
+
+
+
+	def trailing_average(self, num):
+		"""
+		Simple Trailing (T) Average Strategy
+		When the current value is greater than the T average, sell.
+		When the current value is less than the T average, buy.
+		Start with all coins in BTC, ie holding = False
+
+		:param num: <int> The number of data points to use in the T value. Ie, 12 = Trailing 12
+		:return: <int> Coins gained... (This should probably be changed to a better value. There will be issues with price flucations of BTC compared to other coin)
+		"""
+
+		holding = False
+		moving_average = []
+
+		# Build up the moving average here before moving onto the loop
+		while len(moving_average) < num:
+			moving_average.append(self.get_last_trade())
+			time.sleep(300)
+
+		while True:
+
+			# Get current Bid, Ask and Last Transaction
+			current_bid = self.get_current_bid()
+			current_ask = self.get_current_ask()
+			last_trade = self.get_last_trade()
+
+			# Calculate current moving average
+			current_average = sum(moving_average) / num
+
+			
+			# If current bid is greater than average and holding SELL
+			if current_bid > current_average and holding:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+	
+	with open('./database/secrets.json') as file:
+		secrets = json.load(file)
+		file.close()
+
+	bit = Bittrex(secrets)
+
+	tickerVal = bit.get_ticker('BTC-RVN')['result']
+
+	bid = tickerVal['Bid']
+	ask = tickerVal['Ask']
+	last = tickerVal['Last']
+
+	print(format(bid, '.8f'))
+	print(format(ask, '.8f'))
+	print(format(last, '.8f'))
+
+	

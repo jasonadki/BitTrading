@@ -58,7 +58,8 @@ class Tester():
 			else:
 				print(f'N on {currentTime} ', end = '')
 
-			print('{0:.8}'.format(currentVal), end = '')
+			print(format(currentVal, '.8f'), end = '')
+			# print(round(currentVal, 8), end = '')
 			print(f' Wallet: {round(wallet,8)} coinCount: {round(coinCount,8)}')
 
 
@@ -67,6 +68,10 @@ class Tester():
 
 
 		return finalVal
+
+
+
+
 
 
 if __name__ == '__main__':
