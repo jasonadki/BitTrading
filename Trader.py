@@ -14,6 +14,7 @@ class Trader():
 	def __init__(self, secrets, market):
 		self.Bittrex = Bittrex(secrets)
 		self.market = market
+		self.base, self.secondary = market.split('-')
 
 	def get_current_bid(self):
 		"""
@@ -121,7 +122,8 @@ class Trader():
 		:return: <int> Coins gained... (This should probably be changed to a better value. There will be issues with price flucations of BTC compared to other coin)
 		"""
 
-		holding = False
+		# Start assuming holding neither (I do recognize you have to holding one)
+		holdingBase = holdingSecondary = False
 		moving_average = []
 
 		# Build up the moving average here before moving onto the loop
@@ -136,12 +138,52 @@ class Trader():
 			current_ask = self.get_current_ask()
 			last_trade = self.get_last_trade()
 
+
+
 			# Calculate current moving average
+			moving_average = moving_average[1:]
+			moving_average.append(last_trade)
+
+			# Pop oldest value add current and calculate
 			current_average = sum(moving_average) / num
 
-			
-			# If current bid is greater than average and holding SELL
-			if current_bid > current_average and holding:
+			# Determine if holding any Secondary
+			secondaryBalance = self.get_balances()[self.secondary] 
+			holdingSecondary = secondaryBalance > 0
+
+
+			# If current bid is greater than average and holding Secondary SELL
+			if current_bid > current_average and holdingSecondary:
+				print('SELL')
+
+				# Get Current bid orders larger than average
+				buyOptions = test.get_order_book('buy')
+				buyOptions = buyOptions.loc[buyOptions['Rate'] >= current_average]
+
+				# Loop through each bid order and calculate how much to sell of each
+
+				# Log transactions made
+
+			# Determine if holding any of Base
+			baseBalance = self.get_balances()[self.base] 
+			holdingBase = baseBalance > 0
+
+			# If current ask is less than average and holding Base Buy
+			if current_ask < current_average and holdingBase:
+				print('BUY')
+
+				# Get amount of Base holding
+				baseBalance
+
+				# Get current Asks smaller than average
+
+				# Loop through each ask and calculate how much to purchase of each
+
+				# Log transactions
+
+			# sleep for 5 minutes
+
+
 
 
 
@@ -175,5 +217,16 @@ if __name__ == '__main__':
 	print(format(bid, '.8f'))
 	print(format(ask, '.8f'))
 	print(format(last, '.8f'))
+	print(' ')
+
+	test = Trader(secrets, 'BTC-RVN')
+
+	# print(test.get_balances()[test.secondary] > 0)
+
+	buyOptions = test.get_order_book('buy')
+	buyOptions = buyOptions.loc[buyOptions['Rate'] >= .00000285]
+	print(buyOptions)
+	# print(format(max(buyOptions['Rate']), '.8f'))
+	print(format(test.get_current_bid(), '.8f'))
 
 	
