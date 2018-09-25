@@ -3,6 +3,7 @@ from DataGrabber import DataGrabber
 import pandas as pd
 import json
 import time
+import datetime
 
 class Trader():
 	"""
@@ -101,10 +102,7 @@ class Trader():
 
 		df = bit.get_balances()['result']
 
-		coin = [k['Currency'] for k in df]
-		amount = [k['Available'] for k in df]
-
-		result  = dict(zip(coin, amount))
+		result = {d['Currency']:d['Available'] for d in df}
 
 		return result
 
@@ -140,36 +138,52 @@ class Trader():
 
 
 
-			# Calculate current moving average
-			moving_average = moving_average[1:]
-			moving_average.append(last_trade)
-
-			# Pop oldest value add current and calculate
+			# Pop oldest value add current and calculate current moving average
+			moving_average = moving_average[1:].append(last_trade)
 			current_average = sum(moving_average) / num
 
+
+
+
+
 			# Determine if holding any Secondary
-			secondaryBalance = self.get_balances()[self.secondary] 
-			holdingSecondary = secondaryBalance > 0
+			secondaryBalance = self.get_balances()[self.secondary]
 
-
-			# If current bid is greater than average and holding Secondary SELL
-			if current_bid > current_average and holdingSecondary:
+			# If current bid is greater than average and holding Secondary - SELL
+			if current_bid > current_average and secondaryBalance > 0:
 				print('SELL')
 
 				# Get Current bid orders larger than average
-				buyOptions = test.get_order_book('buy')
+				buyOptions = self.get_order_book('buy')
 				buyOptions = buyOptions.loc[buyOptions['Rate'] >= current_average]
 
 				# Loop through each bid order and calculate how much to sell of each
+				while secondaryBalance > 0:
+					topOrder = buyOptions.head(1)
+					sellAmount = max(secondaryBalance, topOrder.iloc[0]['Quantity'])
+					sellRate = topOrder.iloc[0]['Rate']
+
+					# Make the sell
+					self.place_sell(sellAmount, sellRate)
+
+					# Recalculate secondaryBalance
+					secondaryBalance = self.get_balances()[self.secondary]
+
+					# Drop top order from buy book
+					buyOptions = buyOptions[1:]
+
+
 
 				# Log transactions made
 
-			# Determine if holding any of Base
-			baseBalance = self.get_balances()[self.base] 
-			holdingBase = baseBalance > 0
 
-			# If current ask is less than average and holding Base Buy
-			if current_ask < current_average and holdingBase:
+
+
+			# Determine if holding any of Base
+			baseBalance = self.get_balances()[self.base]
+
+			# If current ask is less than average and holding Base - BUY
+			if current_ask < current_average and baseBalance > 0:
 				print('BUY')
 
 				# Get amount of Base holding
@@ -182,6 +196,7 @@ class Trader():
 				# Log transactions
 
 			# sleep for 5 minutes
+			time.sleep(300)
 
 
 
@@ -228,5 +243,12 @@ if __name__ == '__main__':
 	print(buyOptions)
 	# print(format(max(buyOptions['Rate']), '.8f'))
 	print(format(test.get_current_bid(), '.8f'))
+
+	logFile = datetime.datetime.now().strftime("%d%b%Y%H%m") + 'TrailingAverage'
+	logLocation = './log/' + logFile + '.txt'
+	log = open(logLocation, 'w')
+	log.write('Test 3\n')
+	log.write('Test 2\n')
+	log.close()
 
 	
